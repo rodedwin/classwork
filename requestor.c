@@ -12,128 +12,131 @@
 #include "requestor.h"
 
 #define OK 0
+#define INIT_ERR 1
+#define REQ_ERR 2
 
-int main(int argc, char **argv) {
-    
-    int c;
-    int gflag = 0, uflag = 0, oflag = 0, pflag = 0, dflag = 0;
-    char *content, *url;
+int main(int argc, char *argv[]) {
+    //printf("argc: %d\n", argc);
     CURL *curl;
     CURLcode res;
 
-    while(1) {
-        static struct option long_options[] =
-        {
-            {"help", no_argument, 0, 'h'},
-            {"get", no_argument, 0, 'g'},
-            {"url ", required_argument, 0 , 'u'},
-            {"post", required_argument, 0, 'o'},
-            {"put", required_argument, 0, 'p'},
-            {"delete", required_argument, 0, 'd'},
-            {0,0,0,0}
-        };
-    
-        // getopt stores option index here
-        int long_index = 0;
-
-        c = getopt_long_only(argc, argv, "hgu:o:p:d:", \
-            long_options, &long_index);
-
-        // raise usage error if no command line options entered
-        if(argc <= 1) {
-            printf("WARNING: Missing command line options!\n");
-            usage();
-            exit(-1);
+    curl = curl_easy_init();
+    int i, j;
+    //Starts at 1 because we know that ./hw will always be the first arg
+    for(i=1; i < argc; i++) {
+        //printf("Argument %d: %s\n", i, argv[i]);
+        if((strcmp(argv[i], "--get") == 0) || (strcmp(argv[i], "-g") == 0)) {
+            //printf("You called --get\n");
+            for(j=1; j < argc; j++) {
+                if(i == j) {
+                    ;
+                }
+                if((strcmp(argv[j], "--url") == 0) || (strcmp(argv[j], "-u") == 0)) {
+                    if(string_check(argv[j+1])) {
+                        curl_get(argv[j+1], curl, res);
+                    }
+                return OK;
+                }
+            }
         }
+        else if((strcmp(argv[i], "--post") == 0) || (strcmp(argv[i], "-o") == 0)) {
+            printf("You called --post\n");
+            for(j=0; j < argc; j++) {
+                if(i == j) {
+                    ;
+                }
+                if((strcmp(argv[j],  "--url") == 0) || (strcmp(argv[j], "-u") == 0)) {
+                    int k;
+                    int message_len = 0;
+                    for(k=4; k < argc; k++) {
+                        message_len += strlen(argv[k]) + 1;
+                    }
+                    //printf("Message Length is %d\n", message_len);
+                    char curl_message[message_len];
+                    for(k=4; k < argc; k++) {
+                        strcat(curl_message, argv[k]);
+                        if((k + 1) == argc) {
+                            ;
+                        }
+                        else {
+                            strcat(curl_message, " ");
+                        }
+                    }
+                    //printf("String: %s\n", curl_message);
+                    if(string_check(argv[j+1])) {
+                        curl_post(argv[j+1], curl_message, curl, res);
+                    }
+                    return OK;
+                }
+            }
+        }
+        else if((strcmp(argv[i], "--put") == 0) || (strcmp(argv[i], "-p") == 0)) {
+            //printf("You called --put\n");
+            for(j=0; j < argc; j++) {
+                if(i == j) {
+                    ;
+                }
+                if((strcmp(argv[j],  "--url") == 0) || (strcmp(argv[j], "-u") == 0)) {
+                    int k;
+                    int message_len = 0;
+                    for(k=4; k < argc; k++) {
+                        message_len += strlen(argv[k]) + 1;
+                    }
+                    //printf("Message Length is %d\n", message_len);
+                    char curl_message[message_len];
+                    for(k=4; k < argc; k++) {
+                        strcat(curl_message, argv[k]);
+                        if((k + 1) == argc) {
+                            ;
+                        }
+                        else {
+                            strcat(curl_message, " ");
+                        }
+                    }
+                    if(string_check(argv[j+1])) {
+                        curl_put(argv[j+1], curl_message, curl, res);
+                    }
+                    return OK;
 
-        // detect end of options
-        if(c == -1)
-            break;
+                }
+            }
+        }
+        else if((strcmp(argv[i], "--delete") == 0) || (strcmp(argv[i], "-d") == 0)) {
+            //printf("You called --delete\n");
+            for(j=0; j < argc; j++) {
+                if(i == j) {
+                    ;
+                }
+                if((strcmp(argv[j],  "--url") == 0) || (strcmp(argv[j], "-u") == 0)) {
+                    int k;
+                    int message_len = 0;
+                    for(k=4; k < argc; k++) {
+                        message_len += strlen(argv[k]) + 1;
+                    }
+                    //printf("Message Length is %d\n", message_len);
+                    char curl_message[message_len];
+                    for(k=4; k < argc; k++) {
+                        strcat(curl_message, argv[k]);
+                        if((k + 1) == argc) {
+                            ;
+                        }
+                        else {
+                            strcat(curl_message, " ");
+                        }
+                    }
+                    if(string_check(argv[j+1])) {
+                        curl_delete(argv[j+1], curl_message, curl, res);
+                    }
+                    return OK;
 
-        // switch for command line options
-        switch(c) {
-            case 'h':
-                usage();
-                break;
-            case 'u':
-                if(uflag >= 1) {
-                    printf("WARNING: Only URL allowed one url!\n");
-                    usage();
-                    exit(1);
-                } else {
-                    uflag++;
-                    url = optarg;
-                    printf("[HTTP URL] url: %s\n", url);
-                    break;
                 }
-            case 'g':
-                if (gflag >= 1) {
-                    printf("WARNING: Only one VERB option allowed!\n");
-                    usage();
-                    exit(1);
-                } else {
-                    gflag++;
-                    pflag++;
-                    oflag++;
-                    dflag++;
-                    printf("[HTTP GET]\n");
-                    curl_get(url, curl, res);
-                    break;
-                }
-            case 'o':
-                if(oflag) {
-                    printf("WARNING: Only one VERB option allowed!\n");
-                    usage();
-                    exit(1);
-                } else {
-                    oflag++;
-                    gflag++;
-                    pflag++;
-                    dflag++;
-                    content = optarg;
-                    printf("[HTTP POST] content: %s\n", content);
-                    curl_post(url, content, curl, res);
-                    break;
-                }
-            case 'p':
-                if(pflag >= 1) {
-                    printf("WARNING: Only one VERB option allowed!\n");
-                    usage();
-                    exit(1);
-                } else {
-                    pflag++;
-                    oflag++;
-                    gflag++;
-                    dflag++;
-                    content = optarg;
-                    printf("[HTTP PUT] content: %s\n", content);
-                    curl_put(url, content, curl, res);
-                    break;
-                }
-            case 'd':
-                if(dflag >= 1) {
-                    printf("WARNING: Only one VERB option allowed!\n");
-                    usage();
-                    exit(1);
-                } else {
-                    dflag++;
-                    oflag++;
-                    gflag++;
-                    dflag++;
-                    content = optarg;
-                    printf("[HTTP DELETE] content: %s\n", content);
-                    curl_delete(url, content, curl, res);
-                    break;
-                }
-            case '?':
-                // invalid command line options, error already raised by getopt_long
-                printf("WARNING: Invalid command line options!\n");
-                usage();
-                break;
-            default:
-                abort();
+            }
+        }
+        else if((strcmp(argv[i], "--help") == 0) || (strcmp(argv[i], "-h") == 0)) {
+            help_message();
+            return OK;
         }
     }
-    
+    usage_message();
     return OK;
 }
