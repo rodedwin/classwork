@@ -1,3 +1,4 @@
+// making sure this is working
 //  main.c
 //  ece531classwork
 //  Created by Edwin Rodriguez on 7/16/20.
