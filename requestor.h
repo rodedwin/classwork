@@ -80,21 +80,29 @@ void curl_delete(char* url, char *curl_message, CURL *curl, CURLcode res) {
 
 //HELP
 void help_message() {
-    printf("Help:\
+    printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\
+    \n|                    HELP                    |\
+    \n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\
+    \nSyntax:\
+    \n\t./hw <flag 1> <flag 2> <url_address> <message>\
+    \nExamples:\
     \n\t./hw --get --url\
-    \n\t./hw --post --url <web_url> message\
-    \n\t./hw --put --url <web_url> message\
-    \n\t./hw --delete --url <web_url> message\
+    \n\t./hw --post --url <url_address> message\
+    \n\t./hw --put --url <url_address> message\
+    \n\t./hw --delete --url <url_address> message\
     \n\
-    \n\t./hw -g -u <web_url>\
-    \n\t./hw -o -u <web_url> message\
-    \n\t./hw -p -u <web_url> message\
-    \n\t./hw -d -u <web_url> message\
+    \n\t./hw -g -u <url_address>\
+    \n\t./hw -o -u <url_address> message\
+    \n\t./hw -p -u <url_address> message\
+    \n\t./hw -d -u <url_address> message\
     \n\
-    <web_url>:\
-    \n\t http://localhost:port\
-    \n\t or\
-    \n\t http://www.website.com\n");
+    \nSyntax for: <url_address>\
+    \n\thttp://localhost:port\
+    \n\thttp://www.website.com\
+    \n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\
+    \n|                                            |\
+    \n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\
+    \n\n");
 }
 
 
@@ -102,28 +110,24 @@ int string_check(char *message) {
     char *http_str = "http://";
     int return_value;
     if(strstr(message, http_str) == NULL) {
-        printf("\nMissing \"http://\" \n\n");
+        printf("\nMissing http:// \nSee help.\n");
         help_message();
-        return_value = 0;
-        return return_value;
+        return 0;
     }
     else {
         char *local_str = "localhost";
         if(strstr(message, local_str) == NULL) {
-            return_value = 1;
-            return return_value;
+            return 1;
         }
         else {
             char *colon_char = "host:";
             if(strstr(message, colon_char) == NULL) {
-                printf("\nPlease specify a port after localhost\n\n");
+                printf("\nSpecify a port, see help.\n\n");
                 help_message();
-                return_value = 0;
-                return return_value;
+                return 0;
             }
             else {
-                return_value =1;
-                return return_value;
+                return 1;
             }
         }
     }

@@ -139,11 +139,15 @@ int main(int argc, char *argv[]) {
         
         /*------HELP called------*/
         else if((strcmp(argv[i], "--help") == 0) || (strcmp(argv[i], "-h") == 0)) {
-            printf("HELP was called");
             help_message();
             return OK;
         }
         /*------HELP called------*/
+        else {
+            printf("Invalid input, Please see the help section below. \n\n");
+            help_message();
+            return REQ_ERR;
+    }
     }
 
     return OK;
