@@ -1,3 +1,20 @@
+/*
+ 
+ AUTHOR:    Edwin Rodriguez
+ DATE:      7/16/2020
+ FILENAME:  requestor.h
+ PURPOSE:
+    This program implements the use of libcurl. The user can call the executable "hw"
+    to communicate via HTTP.
+    For examples on
+ 
+ REFRENCES:
+    Portions of the code were adapted from the following websites:
+        https://curl.haxx.se/libcurl/c/libcurl-tutorial.html
+        https://curl.haxx.se/libcurl/c/example.html
+ 
+*/
+
 #include<stdio.h>
 #include<string.h>
 #include<getopt.h>
@@ -24,12 +41,15 @@ int main(int argc, char *argv[]) {
     for(i=1; i < argc; i++) {
         
         /*------GET called------*/
+        // check whether --get or -g is used
         if((strcmp(argv[i], "--get") == 0) || (strcmp(argv[i], "-g") == 0)) {
             printf("GET was called... \n");
+            
             for(j=1; j < argc; j++) {
+                // check whether --url or -u is used.
                 if((strcmp(argv[j], "--url") == 0) || (strcmp(argv[j], "-u") == 0)) {
-                    if(string_check(argv[j+1])) {
-                        curl_get(argv[j+1], curl, res);
+                    if(string_check(argv[j+1])) {       // Check for correct URL syn.
+                        curl_get(argv[j+1], curl, res); // Call GET
                     }
                     return OK;
                 }
@@ -38,30 +58,32 @@ int main(int argc, char *argv[]) {
         /*------GET called------*/
         
         /*------POST called------*/
+        // check whether --post or -p is used
         else if((strcmp(argv[i], "--post") == 0) || (strcmp(argv[i], "-o") == 0)) {
             printf("POST was called\n");
+            
             for(j=0; j < argc; j++) {
-                
+                // check whether --url or -u is used
                 if((strcmp(argv[j],  "--url") == 0) || (strcmp(argv[j], "-u") == 0)) {
                     int k;
-                    int message_len = 0;
+                    int msg_length = 0;
                     for(k=4; k < argc; k++) {
-                        message_len += strlen(argv[k]) + 1;
+                        msg_length += strlen(argv[k]) + 1;
                     }
 
-                    char curl_message[message_len];
+                    char message[msg_length];
                     for(k=4; k < argc; k++) {
-                        strcat(curl_message, argv[k]);
+                        strcat(message, argv[k]);
                         if((k + 1) == argc) {
                             ;
                         }
                         else {
-                            strcat(curl_message, " ");
+                            strcat(message, " ");
                         }
                     }
 
                     if(string_check(argv[j+1])) {
-                        curl_post(argv[j+1], curl_message, curl, res);
+                        curl_post(argv[j+1], message, curl, res);
                     }
                     return OK;
                 }
@@ -78,26 +100,25 @@ int main(int argc, char *argv[]) {
                 }
                 if((strcmp(argv[j],  "--url") == 0) || (strcmp(argv[j], "-u") == 0)) {
                     int k;
-                    int message_len = 0;
+                    int msg_length = 0;
                     for(k=4; k < argc; k++) {
-                        message_len += strlen(argv[k]) + 1;
+                        msg_length += strlen(argv[k]) + 1;
                     }
 
-                    char curl_message[message_len];
+                    char message[msg_length];
                     for(k=4; k < argc; k++) {
-                        strcat(curl_message, argv[k]);
+                        strcat(message, argv[k]);
                         if((k + 1) == argc) {
                             ;
                         }
                         else {
-                            strcat(curl_message, " ");
+                            strcat(message, " ");
                         }
                     }
                     if(string_check(argv[j+1])) {
-                        curl_put(argv[j+1], curl_message, curl, res);
+                        curl_put(argv[j+1], message, curl, res);
                     }
                     return OK;
-                    
                 }
             }
         }
@@ -113,23 +134,23 @@ int main(int argc, char *argv[]) {
                 }
                 if((strcmp(argv[j],  "--url") == 0) || (strcmp(argv[j], "-u") == 0)) {
                     int k;
-                    int message_len = 0;
+                    int msg_length = 0;
                     for(k=4; k < argc; k++) {
-                        message_len += strlen(argv[k]) + 1;
+                        msg_length += strlen(argv[k]) + 1;
                     }
-                    //printf("Message Length is %d\n", message_len);
-                    char curl_message[message_len];
+                    //printf("Message Length is %d\n", msg_length);
+                    char message[msg_length];
                     for(k=4; k < argc; k++) {
-                        strcat(curl_message, argv[k]);
+                        strcat(message, argv[k]);
                         if((k + 1) == argc) {
                             ;
                         }
                         else {
-                            strcat(curl_message, " ");
+                            strcat(message, " ");
                         }
                     }
                     if(string_check(argv[j+1])) {
-                        curl_delete(argv[j+1], curl_message, curl, res);
+                        curl_delete(argv[j+1], message, curl, res);
                     }
                     return OK;
                 }
