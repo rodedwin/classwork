@@ -103,7 +103,7 @@ int string_check(char *message) {
     int return_value;
     if(strstr(message, http_str) == NULL) {
         printf("\nMissing \"http://\" \n\n");
-        usage_message();
+        help_message();
         return_value = 0;
         return return_value;
     }
@@ -117,7 +117,7 @@ int string_check(char *message) {
             char *colon_char = "host:";
             if(strstr(message, colon_char) == NULL) {
                 printf("\nPlease specify a port after localhost\n\n");
-                usage_message();
+                help_message();
                 return_value = 0;
                 return return_value;
             }
