@@ -97,26 +97,6 @@ void help_message() {
     \n\t http://www.website.com\n");
 }
 
-//Usage for program (ideal)
-void usage_message() {
-    printf("Usage:\
-    \n\t./hw --get --url\
-    \n\t./hw --post --url <web_url> message\
-    \n\t./hw --put --url <web_url> message\
-    \n\t./hw --delete --url <web_url> message\
-    \n\t./hw --help\
-    \n\
-    \n\t./hw -g -u\
-    \n\t./hw -o -u <web_url> message\
-    \n\t./hw -p -u <web_url> message\
-    \n\t./hw -d -u <web_url> message\
-    \n\t./hw -h\
-    \n\
-    <web_url>:\
-    \n\t http://localhost:port\
-    \n\t or\
-    \n\t http://www.website.com\n");
-}
 
 int string_check(char *message) {
     char *http_str = "http://";
