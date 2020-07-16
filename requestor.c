@@ -1,9 +1,3 @@
-// making sure this is working
-//  main.c
-//  ece531classwork
-//  Created by Edwin Rodriguez on 7/16/20.
-//  Copyright © 2020 Edwin Rodriguez. All rights reserved.
-
 #include<stdio.h>
 #include<string.h>
 #include<getopt.h>
@@ -11,31 +5,29 @@
 #include<stdlib.h>
 #include "requestor.h"
 
-#define OK 0
-#define INIT_ERR 1
-#define REQ_ERR 2
+#define OK          0
+#define INIT_ERR    1
+#define REQ_ERR     2
 
 int main(int argc, char *argv[]) {
-    //printf("argc: %d\n", argc);
+    
     CURL *curl;
     CURLcode res;
-
+    
     curl = curl_easy_init();
     int i, j;
-    //Starts at 1 because we know that ./hw will always be the first arg
+    
+    //Start at 1 because ./hw will be the first arg
     for(i=1; i < argc; i++) {
-        //printf("Argument %d: %s\n", i, argv[i]);
+        
         if((strcmp(argv[i], "--get") == 0) || (strcmp(argv[i], "-g") == 0)) {
-            //printf("You called --get\n");
+            printf("-g, --get was called... \n");
             for(j=1; j < argc; j++) {
-                if(i == j) {
-                    ;
-                }
                 if((strcmp(argv[j], "--url") == 0) || (strcmp(argv[j], "-u") == 0)) {
                     if(string_check(argv[j+1])) {
                         curl_get(argv[j+1], curl, res);
                     }
-                return OK;
+                    return OK;
                 }
             }
         }
@@ -97,7 +89,7 @@ int main(int argc, char *argv[]) {
                         curl_put(argv[j+1], curl_message, curl, res);
                     }
                     return OK;
-
+                    
                 }
             }
         }
@@ -128,7 +120,6 @@ int main(int argc, char *argv[]) {
                         curl_delete(argv[j+1], curl_message, curl, res);
                     }
                     return OK;
-
                 }
             }
         }
