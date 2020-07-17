@@ -98,13 +98,13 @@ int main(int argc, char *argv[]) {
                 if(i == j) {
                     ;
                 }
+                // check whether --url or -u is used
                 if((strcmp(argv[j],  "--url") == 0) || (strcmp(argv[j], "-u") == 0)) {
                     int k;
                     int msg_length = 0;
                     for(k=4; k < argc; k++) {
                         msg_length += strlen(argv[k]) + 1;
                     }
-
                     char message[msg_length];
                     for(k=4; k < argc; k++) {
                         strcat(message, argv[k]);
@@ -132,13 +132,13 @@ int main(int argc, char *argv[]) {
                 if(i == j) {
                     ;
                 }
+                // check whether --url or -u is used
                 if((strcmp(argv[j],  "--url") == 0) || (strcmp(argv[j], "-u") == 0)) {
                     int k;
                     int msg_length = 0;
                     for(k=4; k < argc; k++) {
                         msg_length += strlen(argv[k]) + 1;
                     }
-                    //printf("Message Length is %d\n", msg_length);
                     char message[msg_length];
                     for(k=4; k < argc; k++) {
                         strcat(message, argv[k]);
