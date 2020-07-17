@@ -1,3 +1,4 @@
+//cc -o hw requestor.c
 /*
  
  AUTHOR:    Edwin Rodriguez
