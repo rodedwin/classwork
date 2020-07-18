@@ -52,7 +52,7 @@ static void _do_work(void) {
 		struct tm *timeinfo;
 		time(&time_unformatted);
 		timeinfo = localtime(&time_unformatted);
-		syslog(LOG_INFO, "Localtime: %s", asctime(timeinfo));
+		syslog(LOG_INFO, "Localtime: %s\n", asctime(timeinfo));
 		sleep(1);
 	}
 }
