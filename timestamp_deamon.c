@@ -11,6 +11,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <syslog.h>
+#include <time.h>
 
 #define OK          0
 #define ERR_FORK    1
@@ -46,10 +47,17 @@ static void _signal_handler(const int signal) {
 // This is where we do the work of the deamon. 
 // As is sits, it just counts and sleeps. 
 // Need to modify this section for the homework
-//
+// Now it needs to write date an
 static void _do_work(void) {
 	for(int i=0; true; i++) {
-		syslog(LOG_INFO, "Iteration: %d.\n", i);
+        time_t rawtime;
+		struct tm *timeinfo;
+		time(&rawtime);
+		timeinfo = localtime(&rawtime);
+		/* Uncomment for date & time (long format) */
+		syslog(LOG_INFO, "time: %s", asctime(timeinfo));
+		/* Uncomment for time (short format) */
+		syslog(LOG_INFO, "time: %02d:%02d:%02d", timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec);
 		sleep(1);
 	}
 }
