@@ -45,19 +45,14 @@ static void _signal_handler(const int signal) {
 }
 
 // This is where we do the work of the deamon. 
-// As is sits, it just counts and sleeps. 
-// Need to modify this section for the homework
-// Now it needs to write date an
+// This process will print the localtime formatted.
 static void _do_work(void) {
 	for(int i=0; true; i++) {
-        time_t rawtime;
+        time_t time_unformatted;
 		struct tm *timeinfo;
-		time(&rawtime);
-		timeinfo = localtime(&rawtime);
-		/* Uncomment for date & time (long format) */
-		syslog(LOG_INFO, "time: %s", asctime(timeinfo));
-		/* Uncomment for time (short format) */
-		syslog(LOG_INFO, "time: %02d:%02d:%02d", timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec);
+		time(&time_unformatted);
+		timeinfo = localtime(&time_unformatted);
+		syslog(LOG_INFO, "Localtime: %s", asctime(timeinfo));
 		sleep(1);
 	}
 }
